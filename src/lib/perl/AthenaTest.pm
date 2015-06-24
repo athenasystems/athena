@@ -3,8 +3,8 @@ package AthenaTest;
 # Web Modules Ltd. Athena Community Edition Software 2015
 # https://github.com/athenasystems/athenace The Athena Systems GitHub project
 # Author: Peter Lock - Disfit - for Web Modules Ltd.<coders@athena.systems>
-# Version: 1.1161
-# Released: Wed Jun 24 17:03:46 2015 GMT
+# Version: 1.1162
+# Released: Wed Jun 24 17:05:47 2015 GMT
 # The MIT License (MIT)
 # 
 # Copyright (c) 2015 Web Modules Ltd. UK

@@ -6,7 +6,7 @@ Intended for any Debian based Linux distro
 To install Athena do the following in a terminal
 
 
-`wget -N https://raw.githubusercontent.com/athenasystems/athenace/master/athena-setup && sudo bash athena-setup`
+`wget -N https://raw.githubusercontent.com/athenasystems/athena/master/athena-setup && sudo bash athena-setup`
 
 
 
