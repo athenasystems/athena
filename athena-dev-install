@@ -153,7 +153,6 @@ open( FH, ">/etc/athenace/pwd" );
 print FH "Sys Admin\t$athenarootpwd\n";
 close(FH);
 
-
 my $ret = &section( "", "Populate Athena with dummy data?", 2 );
 if ( $ret == 1 ) {
 	my $init = $athenaDir . '/adm/t/dev/init.pl ' . $athenaRootDbPwd . ' part';
@@ -451,13 +450,13 @@ SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown;';
 sub getSQL() {
 
 	my $athenaSQL = '';
-	
-	open (FH,"<$athenaDir/adm/t/rsc/athena.core.sql");
-	while(<FH>){
+
+	open( FH, "<$athenaDir/adm/t/rsc/athena.core.sql" );
+	while (<FH>) {
 		$athenaSQL .= $_;
 	}
 	close(FH);
-	
+
 	return ($athenaSQL);
 
 }
@@ -465,6 +464,24 @@ sub getSQL() {
 sub makeSSL() {
 
 	my $domain = shift;
+
+	# Get the country code
+	&section( "Enter your 2 letter Country Code", "or hit 'Enter' to accept the default (GB): ", 0 );
+	my $countryCode = <STDIN>;
+	chomp $countryCode;
+	if ( $countryCode eq "" ) { $countryCode = 'GB'; }
+
+	# Get the City
+	&section( "Enter the name of your City", "or hit 'Enter' to accept the default (Leicester): ", 0 );
+	my $city = <STDIN>;
+	chomp $city;
+	if ( $city eq "" ) { $city = 'Leicester'; }
+
+	# Get the County
+	&section( "Enter the name of your County", "or hit 'Enter' to accept the default (Leicestershire): ", 0 );
+	my $county = <STDIN>;
+	chomp $county;
+	if ( $county eq "" ) { $county = 'Leicestershire'; }
 
 	my $ssl_script = '#!/usr/bin/env bash
 
@@ -481,10 +498,10 @@ PASSPHRASE=""
 
 # Set our CSR variables
 SUBJ="
-C=GB
-ST=Leicestershire
+C=' . $countryCode . '
+ST=' . $county . '
 O=
-localityName=Leicester
+localityName=' . $city . '
 commonName=$DOMAIN
 organizationalUnitName=
 emailAddress=
@@ -505,7 +522,6 @@ openssl x509 -req -days 365 -in "$SSL_DIR/'
 	  . '.key" -out "$SSL_DIR/'
 	  . $domain . '.crt"
 ';
-
 	my $tmpFile = '/tmp/Athena.SSL.' . time() . '.sh';
 
 	open( FH, ">$tmpFile" );

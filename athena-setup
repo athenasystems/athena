@@ -8,19 +8,19 @@ spacer="---------------------------------------------------------------"
 if [ -e athena-setup ]
 then rm athena-setup
 fi
+
 echo $spacer
 echo "Hi, step 1, check you have all the stuff we need to install Athena... "
 echo "Hit [ENTER] to continue or 's' to skip this part:"
 echo $spacer
-
 read ans
 
 if [ "$ans" != "s" ]
 then
 #apt-get update
-apt-get -y install libterm-readkey-perl libdbi-perl apache2 mysql-server php5 php5-cli libapache2-mod-php5 expect libcrypt-ssleay-perl libexpect-perl php5-mysqlnd php5-mcrypt libtest-www-mechanize-perl liblocale-currency-format-perl libpdf-create-perl libcrypt-cbc-perl libdatetime-perl
-a2enmod cgi ssl rewrite
-php5enmod mcrypt
+	apt-get -y install libterm-readkey-perl libdbi-perl apache2 mysql-server php5 php5-cli libapache2-mod-php5 expect libcrypt-ssleay-perl libexpect-perl php5-mysqlnd php5-mcrypt libtest-www-mechanize-perl liblocale-currency-format-perl libpdf-create-perl libcrypt-cbc-perl libdatetime-perl
+	a2enmod cgi ssl rewrite
+	php5enmod mcrypt
 fi
 
 echo
@@ -30,7 +30,6 @@ echo "and continue the installation... "
 echo "Type 'd' for the Development version"
 echo "Type 'c' to cancel:"
 echo $spacer
-
 read -n 1 resp
 
 if [ "$resp" = "d" ]; then
@@ -39,7 +38,7 @@ if [ "$resp" = "d" ]; then
 	perl ./athena-dev-install
 	rm athena-dev-install
 else
-echo "Quiting"
+	echo "Quiting"
 fi
 
 exit 1
