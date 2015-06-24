@@ -1,0 +1,7 @@
+- athena/.*
+- athena/adm
+- athena/lib/.*
+- athena/www/.*
+- athena/var/backup/*
+- athena/var/data/*
+- athena/var/logs/*
