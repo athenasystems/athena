@@ -33,7 +33,7 @@ echo $spacer
 read -n 1 resp
 
 if [ "$resp" = "d" ]; then
-	wget -N http://athenace.co.uk/download/athena-dev-install
+	wget -N https://raw.githubusercontent.com/athenasystems/athena/master/athena-dev-install
 	chmod 755 athena-dev-install
 	perl ./athena-dev-install
 	rm athena-dev-install
