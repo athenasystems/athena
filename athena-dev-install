@@ -492,13 +492,13 @@ emailAddress=
 
 # Create our SSL directory
 # in case it doesnt exist
-sudo mkdir -p "$SSL_DIR"
+mkdir -p "$SSL_DIR"
 
 # Generate our Private Key, CSR and Certificate
-sudo openssl genrsa -out "$SSL_DIR/' . $domain . '.key" 2048
-sudo openssl req -new -subj "$(echo -n "$SUBJ" | tr "\n" "/")" -key "$SSL_DIR/'
+openssl genrsa -out "$SSL_DIR/' . $domain . '.key" 2048
+openssl req -new -subj "$(echo -n "$SUBJ" | tr "\n" "/")" -key "$SSL_DIR/'
 	  . $domain . '.key" -out "$SSL_DIR/' . $domain . '.csr" -passin pass:$PASSPHRASE
-sudo openssl x509 -req -days 365 -in "$SSL_DIR/' 
+openssl x509 -req -days 365 -in "$SSL_DIR/' 
 	  . $domain
 	  . '.csr" -signkey "$SSL_DIR/'
 	  . $domain
