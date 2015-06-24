@@ -1,13 +1,8 @@
 Athena CE - Community Edition Installation
 ========
-
-Intended for any Debian based Linux distro
-
-To install Athena do the following in a terminal
-
+Do the following as root, or via sudo :-
 
 `wget -N https://raw.githubusercontent.com/athenasystems/athena/master/athena-setup && bash athena-setup`
-
 
 
 Email Set Up

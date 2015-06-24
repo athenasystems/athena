@@ -14,8 +14,8 @@
 Web Modules Ltd. Athena Community Edition Software 2015
 https://github.com/athenasystems/athenace The Athena Systems GitHub project
 Author: Peter Lock - Disfit - for Web Modules Ltd.<coders@athena.systems>
-Version: 1.1170
-Released: Wed Jun 24 17:33:12 2015 GMT
+Version: 1.1171
+Released: Wed Jun 24 17:40:21 2015 GMT
 The MIT License (MIT)
 
 Copyright (c) 2015 Web Modules Ltd. UK

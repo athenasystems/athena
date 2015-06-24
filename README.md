@@ -13,6 +13,6 @@ The idea here is that no two businesses are the same, and to get good bespoke so
 It is suggested that you set up a development version on a Debian based Linux desktop OS, and run the live version on a non GUI Debian based distro. The installation script below will set up either of these environments.
 
 # Installation
-Do the following on a Debian based Linux distro (e.g. Ubuntu)
+Do the following as root, or via sudo :-
 
 wget -N https://raw.githubusercontent.com/athenasystems/athena/master/athena-setup && bash athena-setup  
