@@ -15,4 +15,4 @@ It is suggested that you set up a development version on a Debian based Linux de
 # Installation
 Do the following on a Debian based Linux distro (e.g. Ubuntu)
 
-wget -N https://raw.githubusercontent.com/athenasystems/athenace/master/athena-setup && sudo bash athena-setup  
+wget -N https://raw.githubusercontent.com/athenasystems/athena/master/athena-setup && sudo bash athena-setup  
