@@ -36,7 +36,7 @@ read -n 1 resp
 if [ "$resp" = "d" ]; then
 	wget -N http://athenace.co.uk/download/athena-dev-install
 	chmod 755 athena-dev-install
-	sudo perl ./athena-dev-install
+	perl ./athena-dev-install
 	rm athena-dev-install
 else
 echo "Quiting"
