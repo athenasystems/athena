@@ -3,8 +3,8 @@
 Web Modules Ltd. Athena Community Edition Software 2015
 https://github.com/athenasystems/athenace The Athena Systems GitHub project
 Author: Peter Lock - Disfit - for Web Modules Ltd.<coders@athena.systems>
-Version: 1.1172
-Released: Wed Jun 24 17:40:52 2015 GMT
+Version: 1.1173
+Released: Wed Jun 24 19:00:41 2015 GMT
 The MIT License (MIT)
 
 Copyright (c) 2015 Web Modules Ltd. UK
@@ -287,9 +287,40 @@ function getPwdID($staffid) {
 
 function getContactPwdID($contactsId) {
     global $db;
-    
+
     $sqltext = "SELECT pwdid FROM pwd WHERE contactsid=?";
     $q = $db->select($sqltext, array($contactsId), 'i');
+    if (! empty($q)) {
+        $r = $q[0];
+        $ret = $r->pwdid;
+    }
+
+    return $ret;
+}
+function getStaffEmailPwdID($email) {
+    global $db;
+    
+    $sqltext = "SELECT pwdid FROM address,pwd,staff WHERE address.email=? 
+AND staff.addsid=address.addsid AND pwd.staffid=staff.staffid";
+    echo $sqltext;
+    $q = $db->select($sqltext, array($email), 's');
+    $ret='';
+    if (! empty($q)) {
+        $r = $q[0];
+        $ret = $r->pwdid;
+    }    
+    
+    return $ret;
+}
+
+function getContactsEmailPwdID($email) {
+    global $db;
+    
+    $sqltext = "SELECT pwdid FROM address,pwd,contacts WHERE address.email='Jacinto.Baynes@athena.systems' 
+AND contacts.addsid=address.addsid AND pwd.contactsid=contacts.contactsid";
+    echo $sqltext;
+    $q = $db->select($sqltext, array($email), 's');
+    $ret='';
     if (! empty($q)) {
         $r = $q[0];
         $ret = $r->pwdid;

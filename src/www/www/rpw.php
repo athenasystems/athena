@@ -3,8 +3,8 @@
 Web Modules Ltd. Athena Community Edition Software 2015
 https://github.com/athenasystems/athenace The Athena Systems GitHub project
 Author: Peter Lock - Disfit - for Web Modules Ltd.<coders@athena.systems>
-Version: 1.1172
-Released: Wed Jun 24 17:40:52 2015 GMT
+Version: 1.1173
+Released: Wed Jun 24 19:00:41 2015 GMT
 The MIT License (MIT)
 
 Copyright (c) 2015 Web Modules Ltd. UK
@@ -28,20 +28,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+$pagetitle = 'Forgotten Password Page';
+$navtitle = 'Home';
+$keywords = '';
+$description = '';
+
 include "/srv/athenace/lib/shared/common.php";
 
-if (!isset($_GET['t'])){
+if (! isset($_GET['t'])) {
     header("Location: /");
     exit();
 }
 
-$t = decrypt(urldecode($_GET['t']));
+$t = base64_decode($_GET['t']);
 $prms = preg_split("/\|/", $t);
 
-echo "{$prms[0]} {$prms[0]}";exit;
+$time = $prms[0];
+$email = $prms[1];
 
-if ($prms[0] < (time() - (60 * 60))) 
-{
+if ($time < (time() - (60 * 60))) {
     
     header("Location: /resetpass?oldreq=y");
     exit();
@@ -65,37 +70,47 @@ if ((isset($_GET['go'])) && ($_GET['go'] == "y")) {
             $status = '<div class="alert alert-danger" role="alert">The Passwords you just entered does not contain a <strong>lowercase letter</strong>. <br>Please try again...</div>';
         } elseif (preg_match("/\d/", $_POST['pw']) === 0) {
             $status = '<div class="alert alert-danger" role="alert">The Passwords you just entered does not contain a <strong>number</strong>. <br>Please try again...</div>';
-        } 
-        else {
+        } else {
             
             $sqltext = "SELECT staffid FROM staff,address WHERE email=?  AND staff.addsid=address.addsid";
-            #print $sqltext;
-            $q = $db->select($sqltext,array($prms[1]),'s') ;
+            // print $sqltext;
+            $q = $db->select($sqltext, array($email), 's');
             
             $r = $q[0];
-           if (! empty($q)) {
+            if (! empty($q)) {
                 
-                $dbvaluePwd = mkPwd($_POST['pw']);
-                $q = $db->update('pwd',array('pw'=>$dbvaluePwd),'s',array('staffid'=>$r->staffid),'i') ;
+                $dbPwd = mkPwd($_POST['pw']);
+                
+                $pwdid = getStaffEmailPwdID($email);
+                // Update DB
+                $pwdUpdate = new Pwd();
+                $pwdUpdate->setPwdid($pwdid);
+                $pwdUpdate->setPw($dbPwd);
+                $pwdUpdate->updateDB();
+                
                 $pw_changed ++;
             } else {
+                
                 $sqltext = "SELECT contactsid FROM contacts,address WHERE email=? AND contacts.addsid=address.addsid";
-                $q = $db->select($sqltext,array($prms[1],'s')) ;
+                $q = $db->select($sqltext, array($email,'s'));
                 $r = $q[0];
-               if (! empty($q)) {
-                        
-                    $dbvaluePwd = mkPwd($_POST['pw']);
+                if (! empty($q)) {
                     
-                    //$sqltext = "UPDATE pwd SET pw='$dbvaluePwd' WHERE contactsid=" . $r->contactsid;
+                    $dbPwd = mkPwd($_POST['pw']);
                     
-                    $q = $db->update('pwd',array('pw'=>$dbvaluePwd),'s',array('contactsid'=>$r->contactsid),'i') ;
+                    $pwdid = getContactsEmailPwdID($email);
+                    // Update DB
+                    $pwdUpdate = new Pwd();
+                    $pwdUpdate->setPwdid($pwdid);
+                    $pwdUpdate->setPw($dbPwd);
+                    $pwdUpdate->updateDB();
                     
                     $pw_changed ++;
                 }
             }
         }
         if ($pw_changed) {
-            header("Location: /index.php?pwchngd=y");
+            header("Location: /login.php?pwch=y");
             exit();
         }
     }
@@ -103,7 +118,7 @@ if ((isset($_GET['go'])) && ($_GET['go'] == "y")) {
 
 include "tmpl/header.php";
 ?>
-<?php echo 'Issued: ' .date('l jS \of F Y h:i:s A',$prms[0]);?>
+<?php echo 'Password Request Issued: ' .date('l jS \of F Y h:i:s A',$prms[0]);?>
 <h2 class="form-signin-heading">Athena Reset Password</h2>
 <?php echo $status;?>
 
