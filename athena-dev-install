@@ -36,6 +36,8 @@ if ($user) { print "\nGotta be root! Not " . $user . "\n"; exit; }
 system("clear");
 system("rm -rf /tmp/Athena*");
 
+my $platform = &getPlatform();
+
 use strict;
 system("clear");
 my $home = $ENV{'HOME'};
@@ -332,41 +334,65 @@ sub setupApache() {
 	$apacheConf =~ s/ATHENADOMAIN/$domain/gs;
 
 	my $apacheOutFile = "/etc/athenace/httpd/athena.conf";
-
 	open( FHOUT, ">$apacheOutFile" );
 	print FHOUT $apacheConf;
 	close(FHOUT);
 
-	my $apacheAvailableConfFile = "/etc/apache2/sites-available/athena.conf";
-
-	open( FHOUT, ">$apacheAvailableConfFile" );
-	print FHOUT "Include /etc/athenace/httpd/athena.conf";
-	close(FHOUT);
-
 	$apacheSharedConf =~ s/ATHENADIR/$dir/gs;
-
 	my $apacheSharedOutFile = "/etc/athenace/httpd/shared.conf";
-
 	open( FHOUT, ">$apacheSharedOutFile" );
 	print FHOUT $apacheSharedConf;
 	close(FHOUT);
 
 	my $apacheSharedSSLOutFile = "/etc/athenace/httpd/ssl.shared.conf";
-
 	$sslSharedTxt =~ s/ATHENADOMAIN/$domain/gs;
-
 	open( FHOUT, ">$apacheSharedSSLOutFile" );
 	print FHOUT $sslSharedTxt;
 	close(FHOUT);
+		
 
-	system("a2enmod cgi");
-	system("a2enmod ssl");
-	system("a2enmod rewrite");
-	system("php5enmod mcrypt");
-	system("a2ensite athena.conf");
-	system("/etc/init.d/apache2 restart");
-	system("service apache2 restart");
+	if ( -e "/etc/apache2/sites-available" ) {
+		open( FH, ">/etc/apache2/sites-available/$domain.conf" );
+		print FH "Include /etc/athenace/httpd/athena.conf";
+		close(FH);
+		print "\n\nApache2 Conf file written to /etc/apache2/sites-available/$domain.conf\n\n";
+		chdir('/etc/apache2/sites-available');
+		system("a2ensite $domain.conf");
+	}
+	elsif ( -e "/etc/apache2/vhosts.d/" ) {
+		open( FH, ">/etc/apache2/vhosts.d/$domain.conf" );
+		print FH "Include /etc/athenace/httpd/athena.conf";
+		close(FH);
+		print "\n\nApache2 Conf file written to /etc/apache2/vhosts.d/$domain.conf\n\n";
+	}
+	elsif ( -e "/etc/httpd/conf.d/" ) {
+		open( FH, ">/etc/httpd/conf.d/$domain.conf" );
+		print FH "Include /etc/athenace/httpd/athena.conf";
+		close(FH);
+		print "\n\nApache2 Conf file written to /etc/httpd/conf.d/$domain.conf\n\n";
+	}
 
+
+	if ( $platform eq 'suse' ) {
+		system("rcapache2 restart");
+	}
+	if ( $platform =~ /^(debain|ubuntu|mint)$/ ) {
+
+		system("a2enmod cgi");
+		system("a2enmod ssl");
+		system("a2enmod rewrite");
+		system("php5enmod mcrypt");
+		system("a2ensite $domain.conf");
+		system("/etc/init.d/apache2 restart");
+		system("service apache2 restart");
+	}
+	if ( $platform =~ /^(fedora|redhat)$/ ) {
+		system("service httpd restart");
+	}
+
+
+
+	
 }
 
 sub makeApacheConfs() {
@@ -558,4 +584,27 @@ echo $given_hash;?>
 	open( FHOUT, ">$secFile" );
 	print FHOUT $secBody;
 	close(FHOUT);
+}
+
+sub getPlatform() {
+	my $q = `cat /etc/*-release`;
+	if ( $q =~ /SUSE/s ) {
+		return 'suse';
+	}
+	if ( $q =~ /Ubuntu/s ) {
+		return 'ubuntu';
+	}
+	if ( $q =~ /LinuxMint/s ) {
+		return 'mint';
+	}
+	if ( $q =~ /Debian/s ) {
+		return 'debian';
+	}
+	if ( $q =~ /Fedora/s ) {
+		return 'fedora';
+	}
+	if ( $q =~ /Red Hat/s ) {
+		return 'redhat';
+	}
+	return 'unknown';
 }

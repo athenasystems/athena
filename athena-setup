@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Prepares your system to run phpStartPoint
+# Prepares your system to run Athena
 clear
 if [ "$(id -u)" != "0" ]; then
 	echo "This script must be run as root if you want to"
@@ -56,7 +56,7 @@ fi
 if [[ $platform == 'debian' ]]; then
 
 	echo $spacer
-	echo "PHP does not appear to be installed"	
+	echo "Check for software to be installed, e.g. Apache2, php5, MySQL and some extra php and perl modules"	
 	echo $installPromt	
 	read -s -n 1 ans
 	if [ "$ans" = "" ]; then 
