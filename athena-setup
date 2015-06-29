@@ -28,7 +28,7 @@ fi
 spacer="---------------------------------------------------------------"
 installPromt="Would you like me to install it now? Y/n:"
 echo $spacer
-echo "Setting up phpStartPoint to create PHP classes and web interfaces ... "
+echo "Setting up Athena to create PHP classes and web interfaces ... "
 echo $spacer
 echo "Checking your OS and environment"
 echo OS is $platform based
@@ -36,7 +36,7 @@ echo OS is $platform based
 if [[ $platform == 'suse' ]]; then
 
 	echo $spacer
-	echo "Install any missing stuff? Y/n:"	
+	echo "OK to install any missing programs and libraries we may need? Y/n:"	
 	read -s -n 1 ans
 	if [ "$ans" = "" ]; then 
 		ans=y
@@ -78,7 +78,7 @@ if [[ $platform == 'redhat' ]]; then
 
 
 	echo $spacer
-	echo "Install any missing stuff? Y/n:"	
+	echo "OK to install any missing programs and libraries we may need? Y/n:"	
 	read -s -n 1 ans
 	if [ "$ans" = "" ]; then 
 		ans=y
@@ -89,8 +89,8 @@ if [[ $platform == 'redhat' ]]; then
 		   exit 1
 		fi
 		
-		yum install httpd perl-DBI perl-TermReadKey perl-DBD-mysql mariadb-server php php-mysql perl-WWW-Mechanize
-		service httpd start
+		yum install httpd perl-DBI perl-TermReadKey perl-DBD-mysql mariadb-server php php-mysql perl-WWW-Mechanize php-mcrypt
+		service httpd restart
 		systemctl start mariadb
 		systemctl enable mariadb
 		
@@ -102,7 +102,7 @@ fi
 
 echo
 echo $spacer
-echo -n "OK, step 2, going to grab the setup script from the web "
+echo -n "OK, step 2, I'm going to grab the setup script from the web "
 echo "and continue the installation... "
 echo "Type 'd' for the Development version"
 echo "Type 'c' to cancel:"

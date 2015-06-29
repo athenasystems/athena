@@ -16,7 +16,7 @@ At a command prompt when logged in as root type
 
 `crontab -e`
 
-And add some thing like
+And add something like
 
 `*/5 * * * * /usr/bin/php /srv/athenace/lib/cron/sendmail.php >> /srv/athenace/var/logs/maillog 2>&1`
 
